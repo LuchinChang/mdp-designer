@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use mdp-designer in your research, please cite it as below."
+title: "mdp-designer: a visual editor for Markov decision processes"
+type: software
+authors:
+  - family-names: Chang
+    given-names: Lu-Chin
+license: MIT
+repository-code: "https://github.com/LuchinChang/mdp-designer"
+keywords:
+  - Markov decision process
+  - reinforcement learning
+  - formal methods
+  - probabilistic model checking

@@ -1,0 +1,122 @@
+:root {
+  --bg: #ffffff;
+  --surface: #f7f7f8;
+  --border: #d9d9de;
+  --text: #1d1d22;
+  --muted: #6b6b76;
+  --state-fill: #ffffff;
+  --state-stroke: #3a3a44;
+  --choice-fill: #3a3a44;
+  --accent: #1565c0;
+  --edge: #55555f;
+  --edge-label-bg: rgba(255, 255, 255, 0.9);
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #16161a;
+    --surface: #1f1f24;
+    --border: #34343c;
+    --text: #ececf1;
+    --muted: #9a9aa6;
+    --state-fill: #22222a;
+    --state-stroke: #c9c9d3;
+    --choice-fill: #c9c9d3;
+    --accent: #64b5f6;
+    --edge: #a8a8b3;
+    --edge-label-bg: rgba(22, 22, 26, 0.9);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; margin: 0; }
+
+body {
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+}
+
+.app { display: flex; flex-direction: column; height: 100%; }
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 14px;
+}
+.brand { font-family: var(--mono); }
+.doc-name { font-weight: 500; }
+.doc-type {
+  font-size: 11px; font-family: var(--mono);
+  padding: 1px 6px; border: 1px solid var(--border); border-radius: 4px; color: var(--muted);
+}
+.example-picker { color: var(--muted); }
+.example-picker select { font: inherit; }
+.spacer { flex: 1; }
+.notice { color: var(--muted); font-size: 12px; }
+
+.canvas { flex: 1; min-height: 0; }
+
+.react-flow {
+  --xy-background-color: var(--bg);
+  --xy-edge-stroke: var(--edge);
+  --xy-edge-stroke-selected: var(--accent);
+  --xy-minimap-background-color: var(--surface);
+  --xy-controls-button-background-color: var(--surface);
+  --xy-controls-button-color: var(--text);
+  --xy-controls-button-border-color: var(--border);
+}
+.react-flow__edge-path { stroke-width: 1.5; }
+
+.hidden-handle { opacity: 0; pointer-events: none; width: 1px; height: 1px; min-width: 0; min-height: 0; border: 0; }
+
+.state-node {
+  position: relative;
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  border: 2px solid var(--state-stroke);
+  background: var(--state-fill);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.state-node.selected { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent); }
+.state-name { max-width: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.state-labels {
+  position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%);
+  display: flex; gap: 3px; white-space: nowrap;
+}
+.label-badge { font-size: 10px; line-height: 1; padding: 3px 5px; border-radius: 8px; color: #fff; }
+
+.initial-marker {
+  position: absolute; right: 100%; top: 50%;
+  width: 28px; height: 2px; background: var(--state-stroke);
+  transform: translateY(-50%);
+}
+.initial-marker::after {
+  content: ''; position: absolute; right: -1px; top: -5px;
+  border-left: 8px solid var(--state-stroke); border-top: 6px solid transparent; border-bottom: 6px solid transparent;
+}
+.initial-marker span { position: absolute; bottom: 4px; left: 0; font-size: 10px; font-family: var(--mono); color: var(--muted); }
+
+.choice-node { width: 12px; height: 12px; border-radius: 50%; background: var(--choice-fill); }
+.choice-node.selected { background: var(--accent); }
+
+.edge-label {
+  position: absolute;
+  pointer-events: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 0 3px;
+  border-radius: 3px;
+  background: var(--edge-label-bg);
+  color: var(--text);
+}
+.edge-label-action { font-style: italic; font-family: var(--font); color: var(--muted); }

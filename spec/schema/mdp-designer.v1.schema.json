@@ -1,0 +1,238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/LuchinChang/mdp-designer/spec/schema/mdp-designer.v1.schema.json",
+  "title": "mdp-designer document v1",
+  "description": "Structural schema for .mdp.json files. Semantic rules (probability sums, referential integrity) are specified in spec/FORMAT.md §6.",
+  "type": "object",
+  "required": ["format", "version", "model"],
+  "properties": {
+    "format": { "const": "mdp-designer" },
+    "version": { "type": "string", "pattern": "^1\\.[0-9]+$" },
+    "metadata": { "$ref": "#/$defs/metadata" },
+    "model": { "$ref": "#/$defs/model" },
+    "layout": { "$ref": "#/$defs/layout" }
+  },
+  "patternProperties": { "^x-": true },
+  "additionalProperties": false,
+
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$" },
+
+    "rational": { "type": "string", "pattern": "^-?[0-9]+/[1-9][0-9]*$" },
+    "number": { "oneOf": [{ "type": "number" }, { "$ref": "#/$defs/rational" }] },
+    "probability": {
+      "oneOf": [
+        { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        { "type": "string", "pattern": "^[0-9]+/[1-9][0-9]*$" }
+      ]
+    },
+
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "authors": { "type": "array", "items": { "type": "string" } },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "source": { "type": "string" },
+        "created": { "type": "string", "format": "date-time" },
+        "modified": { "type": "string", "format": "date-time" }
+      },
+      "patternProperties": { "^x-": true },
+      "additionalProperties": false
+    },
+
+    "model": {
+      "type": "object",
+      "required": ["type", "states", "initial", "choices"],
+      "properties": {
+        "type": { "enum": ["mdp", "dtmc"] },
+        "states": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/state" } },
+        "actions": { "type": "array", "items": { "$ref": "#/$defs/action" } },
+        "initial": {
+          "oneOf": [
+            { "$ref": "#/$defs/id" },
+            {
+              "type": "object",
+              "minProperties": 1,
+              "propertyNames": { "$ref": "#/$defs/id" },
+              "additionalProperties": { "$ref": "#/$defs/probability" }
+            }
+          ]
+        },
+        "choices": { "type": "array", "items": { "$ref": "#/$defs/choice" } },
+        "labels": { "type": "array", "items": { "$ref": "#/$defs/label" } },
+        "rewards": { "type": "array", "items": { "$ref": "#/$defs/rewardStructure" } },
+        "properties": { "type": "array", "items": { "$ref": "#/$defs/property" } }
+      },
+      "patternProperties": { "^x-": true },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "mdp" } } },
+          "then": {
+            "required": ["actions"],
+            "properties": { "choices": { "items": { "required": ["action"] } } }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "dtmc" } } },
+          "then": {
+            "properties": {
+              "actions": { "maxItems": 0 },
+              "choices": { "items": { "not": { "required": ["action"] } } }
+            }
+          }
+        }
+      ]
+    },
+
+    "state": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "labels": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } }
+      },
+      "patternProperties": { "^x-": true },
+      "additionalProperties": false
+    },
+
+    "action": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "patternProperties": { "^x-": true },
+      "additionalProperties": false
+    },
+
+    "choice": {
+      "type": "object",
+      "required": ["id", "state", "branches"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "state": { "$ref": "#/$defs/id" },
+        "action": { "$ref": "#/$defs/id" },
+        "branches": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/branch" } }
+      },
+      "patternProperties": { "^x-": true },
+      "additionalProperties": false
+    },
+
+    "branch": {
+      "type": "object",
+      "required": ["target", "prob"],
+      "properties": {
+        "target": { "$ref": "#/$defs/id" },
+        "prob": { "$ref": "#/$defs/probability" }
+      },
+      "patternProperties": { "^x-": true },
+      "additionalProperties": false
+    },
+
+    "label": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id", "not": { "enum": ["init", "deadlock"] } },
+        "description": { "type": "string" }
+      },
+      "patternProperties": { "^x-": true },
+      "additionalProperties": false
+    },
+
+    "rewardStructure": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "description": { "type": "string" },
+        "state": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/id" },
+          "additionalProperties": { "$ref": "#/$defs/number" }
+        },
+        "choice": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/id" },
+          "additionalProperties": { "$ref": "#/$defs/number" }
+        },
+        "branch": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["choice", "target", "value"],
+            "properties": {
+              "choice": { "$ref": "#/$defs/id" },
+              "target": { "$ref": "#/$defs/id" },
+              "value": { "$ref": "#/$defs/number" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "patternProperties": { "^x-": true },
+      "additionalProperties": false
+    },
+
+    "property": {
+      "type": "object",
+      "required": ["id", "formula"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["pctl", "ltl", "pctl*", "other"] },
+        "formula": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" }
+      },
+      "patternProperties": { "^x-": true },
+      "additionalProperties": false
+    },
+
+    "point": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+    },
+
+    "layout": {
+      "type": "object",
+      "properties": {
+        "states": { "type": "object", "additionalProperties": { "$ref": "#/$defs/point" } },
+        "choices": { "type": "object", "additionalProperties": { "$ref": "#/$defs/point" } },
+        "edges": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*->[A-Za-z_][A-Za-z0-9_.-]*$" },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "curvature": { "type": "number" },
+              "labelT": { "type": "number", "minimum": 0, "maximum": 1 },
+              "loopAngle": { "type": "number" }
+            }
+          }
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": { "color": { "type": "string" } }
+          }
+        },
+        "viewport": {
+          "type": "object",
+          "properties": { "x": { "type": "number" }, "y": { "type": "number" }, "zoom": { "type": "number", "exclusiveMinimum": 0 } }
+        },
+        "grid": {
+          "type": "object",
+          "properties": { "snap": { "type": "boolean" }, "size": { "type": "number", "exclusiveMinimum": 0 } }
+        }
+      }
+    }
+  }
+}

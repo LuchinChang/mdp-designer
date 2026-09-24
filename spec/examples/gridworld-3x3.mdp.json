@@ -1,0 +1,831 @@
+{
+  "format": "mdp-designer",
+  "version": "1.0",
+  "metadata": {
+    "name": "3x3 slippery gridworld",
+    "description": "Each move goes in the intended direction with probability 4/5. It slips to either perpendicular direction with probability 1/10 each. Moving into a wall leaves the agent in place. `r0c2` is the goal and `r1c1` is an absorbing trap.",
+    "tags": [
+      "example",
+      "gridworld",
+      "rl"
+    ]
+  },
+  "model": {
+    "type": "mdp",
+    "states": [
+      {
+        "id": "r0c0"
+      },
+      {
+        "id": "r0c1"
+      },
+      {
+        "id": "r0c2",
+        "labels": [
+          "goal"
+        ]
+      },
+      {
+        "id": "r1c0"
+      },
+      {
+        "id": "r1c1",
+        "labels": [
+          "trap"
+        ]
+      },
+      {
+        "id": "r1c2"
+      },
+      {
+        "id": "r2c0"
+      },
+      {
+        "id": "r2c1"
+      },
+      {
+        "id": "r2c2"
+      }
+    ],
+    "actions": [
+      {
+        "id": "N",
+        "name": "north"
+      },
+      {
+        "id": "S",
+        "name": "south"
+      },
+      {
+        "id": "E",
+        "name": "east"
+      },
+      {
+        "id": "W",
+        "name": "west"
+      },
+      {
+        "id": "stay"
+      }
+    ],
+    "initial": "r2c0",
+    "choices": [
+      {
+        "id": "r0c0_N",
+        "state": "r0c0",
+        "action": "N",
+        "branches": [
+          {
+            "target": "r0c0",
+            "prob": "9/10"
+          },
+          {
+            "target": "r0c1",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r0c0_S",
+        "state": "r0c0",
+        "action": "S",
+        "branches": [
+          {
+            "target": "r1c0",
+            "prob": "4/5"
+          },
+          {
+            "target": "r0c1",
+            "prob": "1/10"
+          },
+          {
+            "target": "r0c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r0c0_E",
+        "state": "r0c0",
+        "action": "E",
+        "branches": [
+          {
+            "target": "r0c1",
+            "prob": "4/5"
+          },
+          {
+            "target": "r0c0",
+            "prob": "1/10"
+          },
+          {
+            "target": "r1c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r0c0_W",
+        "state": "r0c0",
+        "action": "W",
+        "branches": [
+          {
+            "target": "r0c0",
+            "prob": "9/10"
+          },
+          {
+            "target": "r1c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r0c1_N",
+        "state": "r0c1",
+        "action": "N",
+        "branches": [
+          {
+            "target": "r0c1",
+            "prob": "4/5"
+          },
+          {
+            "target": "r0c2",
+            "prob": "1/10"
+          },
+          {
+            "target": "r0c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r0c1_S",
+        "state": "r0c1",
+        "action": "S",
+        "branches": [
+          {
+            "target": "r1c1",
+            "prob": "4/5"
+          },
+          {
+            "target": "r0c2",
+            "prob": "1/10"
+          },
+          {
+            "target": "r0c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r0c1_E",
+        "state": "r0c1",
+        "action": "E",
+        "branches": [
+          {
+            "target": "r0c2",
+            "prob": "4/5"
+          },
+          {
+            "target": "r0c1",
+            "prob": "1/10"
+          },
+          {
+            "target": "r1c1",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r0c1_W",
+        "state": "r0c1",
+        "action": "W",
+        "branches": [
+          {
+            "target": "r0c0",
+            "prob": "4/5"
+          },
+          {
+            "target": "r0c1",
+            "prob": "1/10"
+          },
+          {
+            "target": "r1c1",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r0c2_stay",
+        "state": "r0c2",
+        "action": "stay",
+        "branches": [
+          {
+            "target": "r0c2",
+            "prob": 1
+          }
+        ]
+      },
+      {
+        "id": "r1c0_N",
+        "state": "r1c0",
+        "action": "N",
+        "branches": [
+          {
+            "target": "r0c0",
+            "prob": "4/5"
+          },
+          {
+            "target": "r1c1",
+            "prob": "1/10"
+          },
+          {
+            "target": "r1c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r1c0_S",
+        "state": "r1c0",
+        "action": "S",
+        "branches": [
+          {
+            "target": "r2c0",
+            "prob": "4/5"
+          },
+          {
+            "target": "r1c1",
+            "prob": "1/10"
+          },
+          {
+            "target": "r1c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r1c0_E",
+        "state": "r1c0",
+        "action": "E",
+        "branches": [
+          {
+            "target": "r1c1",
+            "prob": "4/5"
+          },
+          {
+            "target": "r0c0",
+            "prob": "1/10"
+          },
+          {
+            "target": "r2c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r1c0_W",
+        "state": "r1c0",
+        "action": "W",
+        "branches": [
+          {
+            "target": "r1c0",
+            "prob": "4/5"
+          },
+          {
+            "target": "r0c0",
+            "prob": "1/10"
+          },
+          {
+            "target": "r2c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r1c1_stay",
+        "state": "r1c1",
+        "action": "stay",
+        "branches": [
+          {
+            "target": "r1c1",
+            "prob": 1
+          }
+        ]
+      },
+      {
+        "id": "r1c2_N",
+        "state": "r1c2",
+        "action": "N",
+        "branches": [
+          {
+            "target": "r0c2",
+            "prob": "4/5"
+          },
+          {
+            "target": "r1c2",
+            "prob": "1/10"
+          },
+          {
+            "target": "r1c1",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r1c2_S",
+        "state": "r1c2",
+        "action": "S",
+        "branches": [
+          {
+            "target": "r2c2",
+            "prob": "4/5"
+          },
+          {
+            "target": "r1c2",
+            "prob": "1/10"
+          },
+          {
+            "target": "r1c1",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r1c2_E",
+        "state": "r1c2",
+        "action": "E",
+        "branches": [
+          {
+            "target": "r1c2",
+            "prob": "4/5"
+          },
+          {
+            "target": "r0c2",
+            "prob": "1/10"
+          },
+          {
+            "target": "r2c2",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r1c2_W",
+        "state": "r1c2",
+        "action": "W",
+        "branches": [
+          {
+            "target": "r1c1",
+            "prob": "4/5"
+          },
+          {
+            "target": "r0c2",
+            "prob": "1/10"
+          },
+          {
+            "target": "r2c2",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r2c0_N",
+        "state": "r2c0",
+        "action": "N",
+        "branches": [
+          {
+            "target": "r1c0",
+            "prob": "4/5"
+          },
+          {
+            "target": "r2c1",
+            "prob": "1/10"
+          },
+          {
+            "target": "r2c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r2c0_S",
+        "state": "r2c0",
+        "action": "S",
+        "branches": [
+          {
+            "target": "r2c0",
+            "prob": "9/10"
+          },
+          {
+            "target": "r2c1",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r2c0_E",
+        "state": "r2c0",
+        "action": "E",
+        "branches": [
+          {
+            "target": "r2c1",
+            "prob": "4/5"
+          },
+          {
+            "target": "r1c0",
+            "prob": "1/10"
+          },
+          {
+            "target": "r2c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r2c0_W",
+        "state": "r2c0",
+        "action": "W",
+        "branches": [
+          {
+            "target": "r2c0",
+            "prob": "9/10"
+          },
+          {
+            "target": "r1c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r2c1_N",
+        "state": "r2c1",
+        "action": "N",
+        "branches": [
+          {
+            "target": "r1c1",
+            "prob": "4/5"
+          },
+          {
+            "target": "r2c2",
+            "prob": "1/10"
+          },
+          {
+            "target": "r2c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r2c1_S",
+        "state": "r2c1",
+        "action": "S",
+        "branches": [
+          {
+            "target": "r2c1",
+            "prob": "4/5"
+          },
+          {
+            "target": "r2c2",
+            "prob": "1/10"
+          },
+          {
+            "target": "r2c0",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r2c1_E",
+        "state": "r2c1",
+        "action": "E",
+        "branches": [
+          {
+            "target": "r2c2",
+            "prob": "4/5"
+          },
+          {
+            "target": "r1c1",
+            "prob": "1/10"
+          },
+          {
+            "target": "r2c1",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r2c1_W",
+        "state": "r2c1",
+        "action": "W",
+        "branches": [
+          {
+            "target": "r2c0",
+            "prob": "4/5"
+          },
+          {
+            "target": "r1c1",
+            "prob": "1/10"
+          },
+          {
+            "target": "r2c1",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r2c2_N",
+        "state": "r2c2",
+        "action": "N",
+        "branches": [
+          {
+            "target": "r1c2",
+            "prob": "4/5"
+          },
+          {
+            "target": "r2c2",
+            "prob": "1/10"
+          },
+          {
+            "target": "r2c1",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r2c2_S",
+        "state": "r2c2",
+        "action": "S",
+        "branches": [
+          {
+            "target": "r2c2",
+            "prob": "9/10"
+          },
+          {
+            "target": "r2c1",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r2c2_E",
+        "state": "r2c2",
+        "action": "E",
+        "branches": [
+          {
+            "target": "r2c2",
+            "prob": "9/10"
+          },
+          {
+            "target": "r1c2",
+            "prob": "1/10"
+          }
+        ]
+      },
+      {
+        "id": "r2c2_W",
+        "state": "r2c2",
+        "action": "W",
+        "branches": [
+          {
+            "target": "r2c1",
+            "prob": "4/5"
+          },
+          {
+            "target": "r1c2",
+            "prob": "1/10"
+          },
+          {
+            "target": "r2c2",
+            "prob": "1/10"
+          }
+        ]
+      }
+    ],
+    "labels": [
+      {
+        "id": "goal"
+      },
+      {
+        "id": "trap"
+      }
+    ],
+    "rewards": [
+      {
+        "id": "steps",
+        "description": "Unit cost per move",
+        "choice": {
+          "r0c0_N": 1,
+          "r0c0_S": 1,
+          "r0c0_E": 1,
+          "r0c0_W": 1,
+          "r0c1_N": 1,
+          "r0c1_S": 1,
+          "r0c1_E": 1,
+          "r0c1_W": 1,
+          "r1c0_N": 1,
+          "r1c0_S": 1,
+          "r1c0_E": 1,
+          "r1c0_W": 1,
+          "r1c2_N": 1,
+          "r1c2_S": 1,
+          "r1c2_E": 1,
+          "r1c2_W": 1,
+          "r2c0_N": 1,
+          "r2c0_S": 1,
+          "r2c0_E": 1,
+          "r2c0_W": 1,
+          "r2c1_N": 1,
+          "r2c1_S": 1,
+          "r2c1_E": 1,
+          "r2c1_W": 1,
+          "r2c2_N": 1,
+          "r2c2_S": 1,
+          "r2c2_E": 1,
+          "r2c2_W": 1
+        }
+      }
+    ],
+    "properties": [
+      {
+        "id": "reach",
+        "kind": "pctl",
+        "formula": "Pmax=? [ !\"trap\" U \"goal\" ]"
+      },
+      {
+        "id": "steps",
+        "kind": "pctl",
+        "formula": "R{\"steps\"}min=? [ F \"goal\" ]"
+      }
+    ]
+  },
+  "layout": {
+    "states": {
+      "r0c0": {
+        "x": 0,
+        "y": 0
+      },
+      "r0c1": {
+        "x": 240,
+        "y": 0
+      },
+      "r0c2": {
+        "x": 480,
+        "y": 0
+      },
+      "r1c0": {
+        "x": 0,
+        "y": 240
+      },
+      "r1c1": {
+        "x": 240,
+        "y": 240
+      },
+      "r1c2": {
+        "x": 480,
+        "y": 240
+      },
+      "r2c0": {
+        "x": 0,
+        "y": 480
+      },
+      "r2c1": {
+        "x": 240,
+        "y": 480
+      },
+      "r2c2": {
+        "x": 480,
+        "y": 480
+      }
+    },
+    "choices": {
+      "r0c0_N": {
+        "x": 0,
+        "y": -60
+      },
+      "r0c0_S": {
+        "x": 0,
+        "y": 60
+      },
+      "r0c0_E": {
+        "x": 60,
+        "y": 0
+      },
+      "r0c0_W": {
+        "x": -60,
+        "y": 0
+      },
+      "r0c1_N": {
+        "x": 240,
+        "y": -60
+      },
+      "r0c1_S": {
+        "x": 240,
+        "y": 60
+      },
+      "r0c1_E": {
+        "x": 300,
+        "y": 0
+      },
+      "r0c1_W": {
+        "x": 180,
+        "y": 0
+      },
+      "r0c2_stay": {
+        "x": 480,
+        "y": -70
+      },
+      "r1c0_N": {
+        "x": 0,
+        "y": 180
+      },
+      "r1c0_S": {
+        "x": 0,
+        "y": 300
+      },
+      "r1c0_E": {
+        "x": 60,
+        "y": 240
+      },
+      "r1c0_W": {
+        "x": -60,
+        "y": 240
+      },
+      "r1c1_stay": {
+        "x": 240,
+        "y": 170
+      },
+      "r1c2_N": {
+        "x": 480,
+        "y": 180
+      },
+      "r1c2_S": {
+        "x": 480,
+        "y": 300
+      },
+      "r1c2_E": {
+        "x": 540,
+        "y": 240
+      },
+      "r1c2_W": {
+        "x": 420,
+        "y": 240
+      },
+      "r2c0_N": {
+        "x": 0,
+        "y": 420
+      },
+      "r2c0_S": {
+        "x": 0,
+        "y": 540
+      },
+      "r2c0_E": {
+        "x": 60,
+        "y": 480
+      },
+      "r2c0_W": {
+        "x": -60,
+        "y": 480
+      },
+      "r2c1_N": {
+        "x": 240,
+        "y": 420
+      },
+      "r2c1_S": {
+        "x": 240,
+        "y": 540
+      },
+      "r2c1_E": {
+        "x": 300,
+        "y": 480
+      },
+      "r2c1_W": {
+        "x": 180,
+        "y": 480
+      },
+      "r2c2_N": {
+        "x": 480,
+        "y": 420
+      },
+      "r2c2_S": {
+        "x": 480,
+        "y": 540
+      },
+      "r2c2_E": {
+        "x": 540,
+        "y": 480
+      },
+      "r2c2_W": {
+        "x": 420,
+        "y": 480
+      }
+    },
+    "labels": {
+      "goal": {
+        "color": "#2e7d32"
+      },
+      "trap": {
+        "color": "#c62828"
+      }
+    }
+  }
+}

@@ -1,0 +1,268 @@
+{
+  "format": "mdp-designer",
+  "version": "1.0",
+  "metadata": {
+    "name": "Simple reachability with an escapable end component",
+    "description": "Small QUASAR-style reachability MDP. `{s1, s2}` under action `a` is an end component that does not contain the goal. The policy that always picks `b` from `s1` reaches `goal` almost surely, so `Pmax=? [F \"goal\"] = 1` from `s0`. `sink` is a zero sink: a non-goal state whose only choice is a self-loop.",
+    "authors": [
+      "Lu-Chin Chang"
+    ],
+    "tags": [
+      "example",
+      "reachability",
+      "end-component"
+    ]
+  },
+  "model": {
+    "type": "mdp",
+    "states": [
+      {
+        "id": "s0",
+        "name": "start"
+      },
+      {
+        "id": "s1"
+      },
+      {
+        "id": "s2"
+      },
+      {
+        "id": "goal",
+        "labels": [
+          "goal"
+        ]
+      },
+      {
+        "id": "sink",
+        "labels": [
+          "sink"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      },
+      {
+        "id": "stay"
+      }
+    ],
+    "initial": "s0",
+    "choices": [
+      {
+        "id": "c0",
+        "state": "s0",
+        "action": "a",
+        "branches": [
+          {
+            "target": "s1",
+            "prob": "1/2"
+          },
+          {
+            "target": "sink",
+            "prob": "1/2"
+          }
+        ]
+      },
+      {
+        "id": "c1",
+        "state": "s0",
+        "action": "b",
+        "branches": [
+          {
+            "target": "s1",
+            "prob": 1
+          }
+        ]
+      },
+      {
+        "id": "c2",
+        "state": "s1",
+        "action": "a",
+        "branches": [
+          {
+            "target": "s2",
+            "prob": 1
+          }
+        ]
+      },
+      {
+        "id": "c3",
+        "state": "s1",
+        "action": "b",
+        "branches": [
+          {
+            "target": "goal",
+            "prob": "1/10"
+          },
+          {
+            "target": "s1",
+            "prob": "9/10"
+          }
+        ]
+      },
+      {
+        "id": "c4",
+        "state": "s2",
+        "action": "a",
+        "branches": [
+          {
+            "target": "s1",
+            "prob": 1
+          }
+        ]
+      },
+      {
+        "id": "c5",
+        "state": "s2",
+        "action": "b",
+        "branches": [
+          {
+            "target": "sink",
+            "prob": "1/5"
+          },
+          {
+            "target": "s2",
+            "prob": "4/5"
+          }
+        ]
+      },
+      {
+        "id": "c6",
+        "state": "goal",
+        "action": "stay",
+        "branches": [
+          {
+            "target": "goal",
+            "prob": 1
+          }
+        ]
+      },
+      {
+        "id": "c7",
+        "state": "sink",
+        "action": "stay",
+        "branches": [
+          {
+            "target": "sink",
+            "prob": 1
+          }
+        ]
+      }
+    ],
+    "labels": [
+      {
+        "id": "goal",
+        "description": "Target set T"
+      },
+      {
+        "id": "sink",
+        "description": "Zero sink (cannot reach T)"
+      }
+    ],
+    "rewards": [
+      {
+        "id": "steps",
+        "description": "Unit cost per step outside the absorbing states",
+        "choice": {
+          "c0": 1,
+          "c1": 1,
+          "c2": 1,
+          "c3": 1,
+          "c4": 1,
+          "c5": 1
+        }
+      }
+    ],
+    "properties": [
+      {
+        "id": "reach",
+        "kind": "pctl",
+        "formula": "Pmax=? [ F \"goal\" ]",
+        "description": "Maximal reachability probability of the goal"
+      },
+      {
+        "id": "steps_to_goal",
+        "kind": "pctl",
+        "formula": "R{\"steps\"}min=? [ F \"goal\" ]"
+      }
+    ]
+  },
+  "layout": {
+    "states": {
+      "s0": {
+        "x": 0,
+        "y": 0
+      },
+      "s1": {
+        "x": 260,
+        "y": -90
+      },
+      "s2": {
+        "x": 260,
+        "y": 130
+      },
+      "goal": {
+        "x": 520,
+        "y": -90
+      },
+      "sink": {
+        "x": 520,
+        "y": 130
+      }
+    },
+    "choices": {
+      "c0": {
+        "x": 110,
+        "y": 60
+      },
+      "c1": {
+        "x": 120,
+        "y": -60
+      },
+      "c2": {
+        "x": 230,
+        "y": 20
+      },
+      "c3": {
+        "x": 390,
+        "y": -90
+      },
+      "c4": {
+        "x": 290,
+        "y": 20
+      },
+      "c5": {
+        "x": 390,
+        "y": 130
+      },
+      "c6": {
+        "x": 520,
+        "y": -170
+      },
+      "c7": {
+        "x": 610,
+        "y": 130
+      }
+    },
+    "edges": {
+      "c3->s1": {
+        "curvature": 0.5
+      },
+      "c5->s2": {
+        "curvature": 0.5
+      }
+    },
+    "labels": {
+      "goal": {
+        "color": "#2e7d32"
+      },
+      "sink": {
+        "color": "#c62828"
+      }
+    }
+  }
+}

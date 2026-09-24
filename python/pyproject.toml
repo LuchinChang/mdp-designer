@@ -1,0 +1,40 @@
+[project]
+name = "mdp-designer"
+version = "0.1.0"
+description = "Load, convert, and simulate MDPs designed with mdp-designer (.mdp.json)."
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Lu-Chin Chang" }]
+requires-python = ">=3.10"
+dependencies = []
+keywords = ["mdp", "markov-decision-process", "reinforcement-learning", "formal-methods", "prism", "model-checking"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+]
+
+[project.optional-dependencies]
+gym = ["gymnasium>=1.0"]
+
+[project.urls]
+Homepage = "https://github.com/LuchinChang/mdp-designer"
+Specification = "https://github.com/LuchinChang/mdp-designer/blob/main/spec/FORMAT.md"
+
+[dependency-groups]
+dev = ["ruff>=0.6"]
+
+[build-system]
+requires = ["uv_build>=0.12.14,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "mdpdesigner"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

@@ -1,0 +1,22 @@
+# OS / editors
+.DS_Store
+.vscode/
+.idea/
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+.pnpm-store/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+.ruff_cache/
+.mypy_cache/
+
+# Local tooling
+.claude/
