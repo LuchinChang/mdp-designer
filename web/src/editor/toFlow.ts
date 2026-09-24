@@ -1,25 +1,32 @@
 import { MarkerType, type Edge, type Node } from '@xyflow/react'
+import { labelColors } from '../core/palette'
 import { edgeKey, initialDistribution, type MdpDocument, type Point } from '../core/types'
+import { actionEdgeId, branchEdgeId, choiceNodeId, stateNodeId } from './ids'
 
 export type StateNodeData = {
   name: string
-  labels: { id: string; color: string }[]
+  /** Colours of the state's labels, in declaration order. */
+  colors: string[]
+  labels: string[]
   initialProb?: string
 }
-export type ChoiceNodeData = { action?: string }
+export type ChoiceNodeData = { action?: string; color?: string }
 export type MdpEdgeData = {
   label: string
   curvature: number
   labelT: number
   loopAngle: number
   kind: 'action' | 'branch'
+  dimmed?: boolean
+  /** Highlight colour while the edge's action is focused. */
+  color?: string
 }
 
 export type StateFlowNode = Node<StateNodeData, 'state'>
 export type ChoiceFlowNode = Node<ChoiceNodeData, 'choice'>
+export type FlowNode = StateFlowNode | ChoiceFlowNode
 export type MdpFlowEdge = Edge<MdpEdgeData, 'mdp'>
 
-const DEFAULT_LABEL_COLOR = '#607d8b'
 const DEFAULT_CURVE = 0.25
 
 /**
@@ -27,11 +34,12 @@ const DEFAULT_CURVE = 0.25
  * MDP: state -> choice dot -> successors. DTMC: state -> successors directly.
  * Node positions are centres (the canvas uses nodeOrigin [0.5, 0.5]).
  */
-export function toFlow(doc: MdpDocument): { nodes: (StateFlowNode | ChoiceFlowNode)[]; edges: MdpFlowEdge[] } {
+export function toFlow(doc: MdpDocument): { nodes: FlowNode[]; edges: MdpFlowEdge[] } {
   const { model, layout = {} } = doc
   const isMdp = model.type === 'mdp'
   const actionName = new Map((model.actions ?? []).map((a) => [a.id, a.name ?? a.id]))
-  const labelColor = (id: string) => layout.labels?.[id]?.color ?? DEFAULT_LABEL_COLOR
+  const colors = labelColors(doc)
+  const labelOrder = new Map((model.labels ?? []).map((l, i) => [l.id, i]))
   const init = initialDistribution(model)
 
   const cols = Math.ceil(Math.sqrt(model.states.length))
@@ -39,16 +47,20 @@ export function toFlow(doc: MdpDocument): { nodes: (StateFlowNode | ChoiceFlowNo
     model.states.map((s, i) => [s.id, layout.states?.[s.id] ?? { x: (i % cols) * 200, y: Math.floor(i / cols) * 200 }]),
   )
 
-  const nodes: (StateFlowNode | ChoiceFlowNode)[] = model.states.map((s) => ({
-    id: s.id,
-    type: 'state',
-    position: statePos.get(s.id)!,
-    data: {
-      name: s.name ?? s.id,
-      labels: (s.labels ?? []).map((l) => ({ id: l, color: labelColor(l) })),
-      initialProb: s.id in init ? String(init[s.id]) : undefined,
-    },
-  }))
+  const nodes: FlowNode[] = model.states.map((s) => {
+    const labels = [...(s.labels ?? [])].sort((a, b) => (labelOrder.get(a) ?? 0) - (labelOrder.get(b) ?? 0))
+    return {
+      id: stateNodeId(s.id),
+      type: 'state',
+      position: statePos.get(s.id)!,
+      data: {
+        name: s.name ?? s.id,
+        labels,
+        colors: labels.map((l) => colors.get(l) ?? '#888'),
+        initialProb: s.id in init ? String(init[s.id]) : undefined,
+      },
+    }
+  })
 
   const edges: MdpFlowEdge[] = []
   const edgeData = (key: string, label: string, kind: MdpEdgeData['kind']): MdpEdgeData => {
@@ -57,32 +69,34 @@ export function toFlow(doc: MdpDocument): { nodes: (StateFlowNode | ChoiceFlowNo
   }
 
   for (const c of model.choices) {
+    if (!statePos.has(c.state)) continue
+    const action = (c.action && actionName.get(c.action)) ?? c.action ?? ''
     if (isMdp) {
       const src = statePos.get(c.state)!
       const first = statePos.get(c.branches[0]?.target) ?? src
       nodes.push({
-        id: c.id,
+        id: choiceNodeId(c.id),
         type: 'choice',
         position: layout.choices?.[c.id] ?? { x: (src.x * 2 + first.x) / 3, y: (src.y * 2 + first.y) / 3 },
-        data: { action: c.action && actionName.get(c.action) },
+        data: { action },
       })
       edges.push({
-        id: `${c.state}->${c.id}`,
+        id: actionEdgeId(c.id),
         type: 'mdp',
-        source: c.state,
-        target: c.id,
-        data: edgeData(`${c.state}->${c.id}`, (c.action && actionName.get(c.action)) ?? '', 'action'),
+        source: stateNodeId(c.state),
+        target: choiceNodeId(c.id),
+        data: edgeData(`${c.state}->${c.id}`, action, 'action'),
       })
     }
     for (const b of c.branches) {
-      const key = edgeKey(c.id, b.target)
+      if (!statePos.has(b.target)) continue
       edges.push({
-        id: key,
+        id: branchEdgeId(c.id, b.target),
         type: 'mdp',
-        source: isMdp ? c.id : c.state,
-        target: b.target,
+        source: isMdp ? choiceNodeId(c.id) : stateNodeId(c.state),
+        target: stateNodeId(b.target),
         markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16 },
-        data: edgeData(key, String(b.prob), 'branch'),
+        data: edgeData(edgeKey(c.id, b.target), String(b.prob), 'branch'),
       })
     }
   }
@@ -90,7 +104,8 @@ export function toFlow(doc: MdpDocument): { nodes: (StateFlowNode | ChoiceFlowNo
   // Separate antiparallel edges that have no explicit curvature, e.g. s1 -> dot -> s1.
   const pairs = new Set(edges.map((e) => `${e.source}\u0000${e.target}`))
   for (const e of edges) {
-    const explicit = layout.edges?.[e.id]?.curvature !== undefined
+    const key = e.id.slice(2)
+    const explicit = layout.edges?.[key]?.curvature !== undefined
     if (!explicit && e.source !== e.target && pairs.has(`${e.target}\u0000${e.source}`)) e.data!.curvature = DEFAULT_CURVE
   }
 

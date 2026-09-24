@@ -28,7 +28,9 @@ go through the Python package and never need to be drawn.
 | C6 | Branches between the same pair of nodes are drawn curved so they don't overlap. The user can adjust `curvature`. |
 | C7 | DTMC mode hides action dots and draws arrows from state to state. Switching MDP → DTMC is only allowed when every state has at most one choice. |
 | C8 | Multi-select (box and shift-click), delete, copy/paste, and undo/redo (Ctrl/Cmd+Z, Shift+Ctrl/Cmd+Z). |
-| C9 | The initial state is marked with an incoming arrow. Labels appear as colored badges on states. |
+| C9 | The initial state is marked with an incoming arrow and an outer ring, both in a dedicated colour (violet) that no label uses. States are **filled with their label's colour** (equal pie slices when a state has several labels), explained by a **legend** on the canvas. Hovering a legend entry dims every state without that label. |
+| C10 | Two modes, toggled from the canvas controls (the button that replaces React Flow's lock), the menu bar, or ⌘E. **Edit mode**: everything above. **Preview mode**: read-only. Hovering a state or action dot dims everything unrelated to it. For a state, the related elements are its actions, their successors, and its incoming branches with their predecessors. Its own actions are **colour-coded, one colour per action**, so you can pick one out and then hover it. Hovering an action dot **or any of its edges** focuses that action: its state, its successors and all of its edges, in the action's colour. |
+| C11 | Dropping a connection on empty canvas creates a new state there and connects to it. |
 
 ### Inspector
 | ID | Requirement |
@@ -36,6 +38,7 @@ go through the Python package and never need to be drawn.
 | I1 | **State:** edit name, labels, initial probability and description. List its choices. |
 | I2 | **Choice:** edit the action (pick one or create one), edit branch probabilities (accepts `0.3` or `3/10`), and show the running sum. A "normalize" button fixes the sum. |
 | I3 | **Model:** edit metadata, type (mdp/dtmc), actions, labels (with colors), reward structures and properties. |
+| I5 | The side panel (inspector + problems) collapses to a thin rail (⌘\ or the » button); the rail shows the problem count. |
 | I4 | **Reward overlay:** choose a reward structure and show its values on states and edges. |
 
 ### Validation
@@ -45,14 +48,31 @@ go through the Python package and never need to be drawn.
 | V2 | Clicking an issue selects and focuses the entity. Invalid entities are outlined on the canvas. |
 | V3 | Export stays available when there are warnings. Exporting with errors requires a confirmation. |
 
+### Menu bar
+| ID | Requirement |
+|---|---|
+| M1 | **Library** (⌘L) slot. **File**: New MDP, New DTMC, Library…, Import .mdp.json… (⌘O), Download .mdp.json (⌘S). **Edit**: Undo (⌘Z), Redo (⇧⌘Z). **View**: Edit/Preview mode (⌘E), Side panel (⌘\), Snap to grid. **Help**: format spec, issues, source. |
+| M2 | The status (valid / N warnings / N errors) and an Edit/Preview switch are always visible in the menu bar. |
+
 ### Files and interop
 | ID | Requirement |
 |---|---|
 | F1 | Open and save `.mdp.json`, by file picker or drag-and-drop of the file onto the canvas. |
-| F2 | Autosave to localStorage and offer to restore it on the next visit. |
+| F2 | Autosave every edit to the library (see L3). The last open model reopens on the next visit. |
 | F3 | Export: PRISM (`.prism` + `.props`), JANI, explicit (`.tra/.lab/.srew/.trew`), SVG, PNG and TikZ. |
 | F4 | Import: explicit (`.tra` + `.lab`) and flat JANI. Positions come from auto-layout (ELK). |
-| F5 | A gallery with the example models from `spec/examples/`. |
+| F5 | The example models from `spec/examples/` appear in the library. |
+
+### Library
+| ID | Requirement |
+|---|---|
+| L1 | **Library** has its own slot in the menu bar and opens with ⌘L (also File → Library…). It covers the workspace; Esc closes it. |
+| L2 | Each model is a **card**: a **thumbnail of the MDP's shape** (states, action dots and edges drawn from `layout`, label colours, the initial state in violet, no text), plus its **name**, type, size, last-edited time and **tags**. |
+| L3 | **Everything is autosaved.** Every edited model is stored in IndexedDB, on disk in the browser profile, with persistent storage requested. Opening an example does not add it to the library until it is edited. |
+| L4 | **Optional folder mirror** (Chromium): "Link folder…" writes every model to `<name>.<id>.mdp.json` in a chosen folder and imports `.mdp.json` files already there. Renames and deletes follow. After a reload the browser asks to reconnect. |
+| L5 | Card actions: Open, Rename (F2), Edit tags, Duplicate, Download .mdp.json, Delete (with Undo). Example cards offer Open, Duplicate to My models, and Download. |
+| L6 | Search by name, description or tag. Filter by type (MDP/DTMC) and by tag. Arrow keys move between cards and Enter opens. Dropping `.mdp.json` files on the library imports them. |
+| L7 | Thumbnails are rendered from the document, not stored as images, so they always match the file. |
 
 ### Non-functional
 - The editor is a static site with no server or account, hosted on GitHub Pages.

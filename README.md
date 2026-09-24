@@ -12,8 +12,9 @@ learning** who need to:
   components, zero sinks or hard exploration instances;
 - share models as plain, diff-friendly files.
 
-> **Status: pre-alpha.** The file format (v1.0) is specified. The editor
-> currently renders models read-only; interactive editing comes next. See the
+> **Status: pre-alpha.** The file format (v1.0) is specified.
+> You can draw, edit, validate and save models in the editor. Exporters, the
+> model library and the NumPy/Gymnasium bridges are next. See the
 > [roadmap](docs/SPEC.md).
 
 ## How MDPs are drawn

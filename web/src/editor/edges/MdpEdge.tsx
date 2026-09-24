@@ -55,12 +55,22 @@ export function MdpEdge({ id, source, target, data, markerEnd, style, selected }
 
   return (
     <>
-      <BaseEdge id={id} path={path} markerEnd={markerEnd} style={style} className={selected ? 'selected' : undefined} />
+      <BaseEdge
+        id={id}
+        path={path}
+        markerEnd={markerEnd}
+        style={data.color ? { ...style, stroke: data.color, strokeWidth: 2.25 } : style}
+        className={`${selected ? 'selected' : ''}${data.dimmed ? ' dimmed' : ''}`}
+        interactionWidth={14}
+      />
       {data.label && (
         <EdgeLabelRenderer>
           <div
-            className={`edge-label edge-label-${data.kind}`}
-            style={{ transform: `translate(-50%, -50%) translate(${labelPos.x}px, ${labelPos.y}px)` }}
+            className={`edge-label edge-label-${data.kind}${selected ? ' selected' : ''}${data.dimmed ? ' dimmed' : ''}`}
+            style={{
+              transform: `translate(-50%, -50%) translate(${labelPos.x}px, ${labelPos.y}px)`,
+              ...(data.color ? { color: data.color, fontWeight: 600 } : {}),
+            }}
           >
             {data.label}
           </div>

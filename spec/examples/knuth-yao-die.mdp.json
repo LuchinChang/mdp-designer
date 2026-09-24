@@ -2,64 +2,366 @@
   "format": "mdp-designer",
   "version": "1.0",
   "metadata": {
-    "name": "Knuth–Yao die",
+    "name": "Knuth\u2013Yao die",
     "description": "Simulates a fair six-sided die with a fair coin (Knuth & Yao, 1976). This is the classic PRISM DTMC case study. Every face is reached with probability exactly 1/6.",
-    "tags": ["example", "dtmc", "prism-case-study"],
+    "tags": [
+      "example",
+      "dtmc",
+      "prism-case-study"
+    ],
     "source": "https://www.prismmodelchecker.org/casestudies/dice.php"
   },
   "model": {
     "type": "dtmc",
     "states": [
-      { "id": "s0" }, { "id": "s1" }, { "id": "s2" }, { "id": "s3" },
-      { "id": "s4" }, { "id": "s5" }, { "id": "s6" },
-      { "id": "d1", "name": "1", "labels": ["done"] },
-      { "id": "d2", "name": "2", "labels": ["done"] },
-      { "id": "d3", "name": "3", "labels": ["done"] },
-      { "id": "d4", "name": "4", "labels": ["done"] },
-      { "id": "d5", "name": "5", "labels": ["done"] },
-      { "id": "d6", "name": "6", "labels": ["done", "six"] }
+      {
+        "id": "s0"
+      },
+      {
+        "id": "s1"
+      },
+      {
+        "id": "s2"
+      },
+      {
+        "id": "s3"
+      },
+      {
+        "id": "s4"
+      },
+      {
+        "id": "s5"
+      },
+      {
+        "id": "s6"
+      },
+      {
+        "id": "d1",
+        "name": "1",
+        "labels": [
+          "done"
+        ]
+      },
+      {
+        "id": "d2",
+        "name": "2",
+        "labels": [
+          "done"
+        ]
+      },
+      {
+        "id": "d3",
+        "name": "3",
+        "labels": [
+          "done"
+        ]
+      },
+      {
+        "id": "d4",
+        "name": "4",
+        "labels": [
+          "done"
+        ]
+      },
+      {
+        "id": "d5",
+        "name": "5",
+        "labels": [
+          "done"
+        ]
+      },
+      {
+        "id": "d6",
+        "name": "6",
+        "labels": [
+          "done",
+          "six"
+        ]
+      }
     ],
     "initial": "s0",
     "choices": [
-      { "id": "c_s0", "state": "s0", "branches": [{ "target": "s1", "prob": "1/2" }, { "target": "s2", "prob": "1/2" }] },
-      { "id": "c_s1", "state": "s1", "branches": [{ "target": "s3", "prob": "1/2" }, { "target": "s4", "prob": "1/2" }] },
-      { "id": "c_s2", "state": "s2", "branches": [{ "target": "s5", "prob": "1/2" }, { "target": "s6", "prob": "1/2" }] },
-      { "id": "c_s3", "state": "s3", "branches": [{ "target": "s1", "prob": "1/2" }, { "target": "d1", "prob": "1/2" }] },
-      { "id": "c_s4", "state": "s4", "branches": [{ "target": "d2", "prob": "1/2" }, { "target": "d3", "prob": "1/2" }] },
-      { "id": "c_s5", "state": "s5", "branches": [{ "target": "d4", "prob": "1/2" }, { "target": "d5", "prob": "1/2" }] },
-      { "id": "c_s6", "state": "s6", "branches": [{ "target": "s2", "prob": "1/2" }, { "target": "d6", "prob": "1/2" }] },
-      { "id": "c_d1", "state": "d1", "branches": [{ "target": "d1", "prob": 1 }] },
-      { "id": "c_d2", "state": "d2", "branches": [{ "target": "d2", "prob": 1 }] },
-      { "id": "c_d3", "state": "d3", "branches": [{ "target": "d3", "prob": 1 }] },
-      { "id": "c_d4", "state": "d4", "branches": [{ "target": "d4", "prob": 1 }] },
-      { "id": "c_d5", "state": "d5", "branches": [{ "target": "d5", "prob": 1 }] },
-      { "id": "c_d6", "state": "d6", "branches": [{ "target": "d6", "prob": 1 }] }
+      {
+        "id": "c_s0",
+        "state": "s0",
+        "branches": [
+          {
+            "target": "s1",
+            "prob": "1/2"
+          },
+          {
+            "target": "s2",
+            "prob": "1/2"
+          }
+        ]
+      },
+      {
+        "id": "c_s1",
+        "state": "s1",
+        "branches": [
+          {
+            "target": "s3",
+            "prob": "1/2"
+          },
+          {
+            "target": "s4",
+            "prob": "1/2"
+          }
+        ]
+      },
+      {
+        "id": "c_s2",
+        "state": "s2",
+        "branches": [
+          {
+            "target": "s5",
+            "prob": "1/2"
+          },
+          {
+            "target": "s6",
+            "prob": "1/2"
+          }
+        ]
+      },
+      {
+        "id": "c_s3",
+        "state": "s3",
+        "branches": [
+          {
+            "target": "s1",
+            "prob": "1/2"
+          },
+          {
+            "target": "d1",
+            "prob": "1/2"
+          }
+        ]
+      },
+      {
+        "id": "c_s4",
+        "state": "s4",
+        "branches": [
+          {
+            "target": "d2",
+            "prob": "1/2"
+          },
+          {
+            "target": "d3",
+            "prob": "1/2"
+          }
+        ]
+      },
+      {
+        "id": "c_s5",
+        "state": "s5",
+        "branches": [
+          {
+            "target": "d4",
+            "prob": "1/2"
+          },
+          {
+            "target": "d5",
+            "prob": "1/2"
+          }
+        ]
+      },
+      {
+        "id": "c_s6",
+        "state": "s6",
+        "branches": [
+          {
+            "target": "s2",
+            "prob": "1/2"
+          },
+          {
+            "target": "d6",
+            "prob": "1/2"
+          }
+        ]
+      },
+      {
+        "id": "c_d1",
+        "state": "d1",
+        "branches": [
+          {
+            "target": "d1",
+            "prob": 1
+          }
+        ]
+      },
+      {
+        "id": "c_d2",
+        "state": "d2",
+        "branches": [
+          {
+            "target": "d2",
+            "prob": 1
+          }
+        ]
+      },
+      {
+        "id": "c_d3",
+        "state": "d3",
+        "branches": [
+          {
+            "target": "d3",
+            "prob": 1
+          }
+        ]
+      },
+      {
+        "id": "c_d4",
+        "state": "d4",
+        "branches": [
+          {
+            "target": "d4",
+            "prob": 1
+          }
+        ]
+      },
+      {
+        "id": "c_d5",
+        "state": "d5",
+        "branches": [
+          {
+            "target": "d5",
+            "prob": 1
+          }
+        ]
+      },
+      {
+        "id": "c_d6",
+        "state": "d6",
+        "branches": [
+          {
+            "target": "d6",
+            "prob": 1
+          }
+        ]
+      }
     ],
     "labels": [
-      { "id": "done", "description": "A face has been decided" },
-      { "id": "six", "description": "The die shows 6" }
+      {
+        "id": "done",
+        "description": "A face has been decided"
+      },
+      {
+        "id": "six",
+        "description": "The die shows 6"
+      }
     ],
     "rewards": [
-      { "id": "coin_flips", "description": "One coin flip per non-terminal step",
-        "state": { "s0": 1, "s1": 1, "s2": 1, "s3": 1, "s4": 1, "s5": 1, "s6": 1 } }
+      {
+        "id": "coin_flips",
+        "description": "One coin flip per non-terminal step",
+        "state": {
+          "s0": 1,
+          "s1": 1,
+          "s2": 1,
+          "s3": 1,
+          "s4": 1,
+          "s5": 1,
+          "s6": 1
+        }
+      }
     ],
     "properties": [
-      { "id": "p_six", "kind": "pctl", "formula": "P=? [ F \"six\" ]", "description": "Equals 1/6" },
-      { "id": "expected_flips", "kind": "pctl", "formula": "R{\"coin_flips\"}=? [ F \"done\" ]", "description": "Equals 11/3" }
+      {
+        "id": "p_six",
+        "kind": "pctl",
+        "formula": "P=? [ F \"six\" ]",
+        "description": "Equals 1/6"
+      },
+      {
+        "id": "expected_flips",
+        "kind": "pctl",
+        "formula": "R{\"coin_flips\"}=? [ F \"done\" ]",
+        "description": "Equals 11/3"
+      }
     ]
   },
   "layout": {
     "states": {
-      "s0": { "x": 400, "y": 0 },
-      "s1": { "x": 200, "y": 120 }, "s2": { "x": 600, "y": 120 },
-      "s3": { "x": 100, "y": 240 }, "s4": { "x": 300, "y": 240 },
-      "s5": { "x": 500, "y": 240 }, "s6": { "x": 700, "y": 240 },
-      "d1": { "x": 50,  "y": 380 }, "d2": { "x": 250, "y": 380 }, "d3": { "x": 350, "y": 380 },
-      "d4": { "x": 450, "y": 380 }, "d5": { "x": 550, "y": 380 }, "d6": { "x": 750, "y": 380 }
+      "s0": {
+        "x": 400,
+        "y": 0
+      },
+      "s1": {
+        "x": 200,
+        "y": 120
+      },
+      "s2": {
+        "x": 600,
+        "y": 120
+      },
+      "s3": {
+        "x": 100,
+        "y": 240
+      },
+      "s4": {
+        "x": 300,
+        "y": 240
+      },
+      "s5": {
+        "x": 500,
+        "y": 240
+      },
+      "s6": {
+        "x": 700,
+        "y": 240
+      },
+      "d1": {
+        "x": 50,
+        "y": 380
+      },
+      "d2": {
+        "x": 250,
+        "y": 380
+      },
+      "d3": {
+        "x": 350,
+        "y": 380
+      },
+      "d4": {
+        "x": 450,
+        "y": 380
+      },
+      "d5": {
+        "x": 550,
+        "y": 380
+      },
+      "d6": {
+        "x": 750,
+        "y": 380
+      }
     },
     "labels": {
-      "done": { "color": "#1565c0" },
-      "six": { "color": "#6a1b9a" }
+      "done": {
+        "color": "#1565c0"
+      },
+      "six": {
+        "color": "#6a1b9a"
+      }
+    },
+    "edges": {
+      "c_d1->d1": {
+        "loopAngle": 90
+      },
+      "c_d2->d2": {
+        "loopAngle": 90
+      },
+      "c_d3->d3": {
+        "loopAngle": 90
+      },
+      "c_d4->d4": {
+        "loopAngle": 90
+      },
+      "c_d5->d5": {
+        "loopAngle": 90
+      },
+      "c_d6->d6": {
+        "loopAngle": 90
+      }
     }
   }
 }
