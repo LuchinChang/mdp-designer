@@ -13,9 +13,9 @@ learning** who need to:
 - share models as plain, diff-friendly files.
 
 > **Status: pre-alpha.** The file format (v1.0) is specified.
-> You can draw, edit, validate and save models in the editor. Exporters, the
-> model library and the NumPy/Gymnasium bridges are next. See the
-> [roadmap](docs/SPEC.md).
+> You can draw, edit, validate and save models in the editor, and export them
+> to PRISM, JANI and the explicit format. The NumPy/Gymnasium bridges are next.
+> See the [roadmap](docs/SPEC.md).
 
 ## How MDPs are drawn
 
@@ -46,8 +46,8 @@ Models are stored as `.mdp.json`. The `model` part holds the mathematics
 | Python | `pip install mdp-designer`, then `mdpdesigner.load("model.mdp.json")` | loader ✅ |
 | NumPy | `model.to_sparse()` / `model.to_dense()` | planned |
 | Gymnasium | `pip install mdp-designer[gym]` → `MDPEnv` with action masks | planned |
-| PRISM / Storm | export `.prism` + `.props`, or explicit `.tra/.lab` | planned |
-| JANI | export `.jani` (also works with QVBS-style tooling) | planned |
+| PRISM / Storm | File → Export → PRISM (`.prism` + `.props`) or Explicit (`.tra/.lab/.srew/.trew`, zipped); `mdp-designer convert FILE --to prism\|explicit` | ✅ |
+| JANI | File → Export → JANI (`.jani`, QVBS style); `mdp-designer convert FILE --to jani`. For QUASAR, use *JANI for QUASAR* / `--no-rewards` | ✅ |
 | Papers | SVG / PNG / TikZ export | planned |
 
 ## Repository layout

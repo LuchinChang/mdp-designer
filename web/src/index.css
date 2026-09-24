@@ -90,6 +90,11 @@ code, .mono { font-family: var(--mono); }
 .menu-shortcut { color: var(--muted); font-size: 12px; }
 .menu-separator { height: 1px; background: var(--border); margin: 4px 6px; }
 .menu-heading { font-size: 11px; color: var(--muted); padding: 4px 8px 2px 26px; text-transform: uppercase; letter-spacing: 0.04em; }
+.menu-submenu { position: relative; display: flex; flex-direction: column; }
+.menu-dropdown.submenu { display: none; top: -5px; left: 100%; min-width: 260px; }
+.menu-submenu:hover > .menu-dropdown.submenu, .menu-submenu:focus-within > .menu-dropdown.submenu { display: flex; }
+.menu-submenu:hover > .menu-item, .menu-submenu:focus-within > .menu-item { background: var(--accent); color: #fff; }
+.menu-submenu:hover > .menu-item .menu-shortcut, .menu-submenu:focus-within > .menu-item .menu-shortcut { color: inherit; }
 
 .doc-name { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .doc-type {

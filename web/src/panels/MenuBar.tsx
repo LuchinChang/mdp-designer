@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { commands, MOD, SHIFT } from '../commands'
+import { commands, exportModel, MOD, SHIFT } from '../commands'
 import { useDocument } from '../store/document'
 
 type Item =
   | { label: string; run: () => void; shortcut?: string; disabled?: boolean; checked?: boolean }
   | { separator: true }
   | { heading: string }
+  | { label: string; submenu: Item[] }
 
 const REPO = 'https://github.com/LuchinChang/mdp-designer'
 
@@ -29,33 +30,47 @@ function Menu({ name, items, open, anyOpen, onOpen, onClose }: {
       >
         {name}
       </button>
-      {open && (
-        <div className="menu-dropdown" role="menu">
-          {items.map((it, i) =>
-            'separator' in it ? (
-              <div key={i} className="menu-separator" role="separator" />
-            ) : 'heading' in it ? (
-              <div key={i} className="menu-heading">
-                {it.heading}
-              </div>
-            ) : (
-              <button
-                key={i}
-                role="menuitem"
-                className="menu-item"
-                disabled={it.disabled}
-                onClick={() => {
-                  onClose()
-                  it.run()
-                }}
-              >
-                <span className="menu-check">{it.checked ? '✓' : ''}</span>
-                <span className="menu-label">{it.label}</span>
-                {it.shortcut && <span className="menu-shortcut">{it.shortcut}</span>}
-              </button>
-            ),
-          )}
-        </div>
+      {open && <Dropdown items={items} onClose={onClose} />}
+    </div>
+  )
+}
+
+function Dropdown({ items, onClose, sub }: { items: Item[]; onClose: () => void; sub?: boolean }) {
+  return (
+    <div className={`menu-dropdown${sub ? ' submenu' : ''}`} role="menu">
+      {items.map((it, i) =>
+        'separator' in it ? (
+          <div key={i} className="menu-separator" role="separator" />
+        ) : 'heading' in it ? (
+          <div key={i} className="menu-heading">
+            {it.heading}
+          </div>
+        ) : 'submenu' in it ? (
+          // Opens on hover or keyboard focus, as in desktop menus.
+          <div key={i} className="menu-submenu">
+            <button role="menuitem" className="menu-item" aria-haspopup="menu">
+              <span className="menu-check" />
+              <span className="menu-label">{it.label}</span>
+              <span className="menu-shortcut">▸</span>
+            </button>
+            <Dropdown items={it.submenu} onClose={onClose} sub />
+          </div>
+        ) : (
+          <button
+            key={i}
+            role="menuitem"
+            className="menu-item"
+            disabled={it.disabled}
+            onClick={() => {
+              onClose()
+              it.run()
+            }}
+          >
+            <span className="menu-check">{it.checked ? '✓' : ''}</span>
+            <span className="menu-label">{it.label}</span>
+            {it.shortcut && <span className="menu-shortcut">{it.shortcut}</span>}
+          </button>
+        ),
       )}
     </div>
   )
@@ -94,6 +109,15 @@ export function MenuBar({ errors, warnings }: { errors: number; warnings: number
         { separator: true },
         { label: 'Import .mdp.json…', run: commands.open, shortcut: `${MOD}O` },
         { label: 'Download .mdp.json', run: commands.save, shortcut: `${MOD}S` },
+        {
+          label: 'Export',
+          submenu: [
+            { label: 'PRISM (.prism + .props)', run: () => exportModel('prism') },
+            { label: 'JANI (.jani)', run: () => exportModel('jani') },
+            { label: 'JANI for QUASAR (no rewards)', run: () => exportModel('jani-quasar') },
+            { label: 'Explicit (.tra .lab .srew .trew, zip)', run: () => exportModel('explicit') },
+          ],
+        },
       ],
     ],
     [

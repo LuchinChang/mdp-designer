@@ -1,17 +1,20 @@
 import type { MdpDocument } from '../core/types'
 import { parseDocument, serializeDocument } from './json'
 
-function slug(name: string) {
+export function slug(name: string) {
   return name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'model'
+}
+
+export function downloadBlob(blob: Blob, name: string) {
+  const url = URL.createObjectURL(blob)
+  const a = Object.assign(document.createElement('a'), { href: url, download: name })
+  a.click()
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
 export function downloadDocument(doc: MdpDocument) {
   const stamped: MdpDocument = { ...doc, metadata: { ...doc.metadata, modified: new Date().toISOString() } }
-  const blob = new Blob([serializeDocument(stamped)], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
-  const a = Object.assign(document.createElement('a'), { href: url, download: `${slug(doc.metadata?.name ?? '')}.mdp.json` })
-  a.click()
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
+  downloadBlob(new Blob([serializeDocument(stamped)], { type: 'application/json' }), `${slug(doc.metadata?.name ?? '')}.mdp.json`)
 }
 
 export async function readDocumentFile(file: File): Promise<MdpDocument> {

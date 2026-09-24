@@ -36,3 +36,20 @@ is versioned independently.
 - The initial state has a dedicated colour (ring and arrow).
 - Collapsible side panel (⌘\).
 - Python package skeleton (`mdpdesigner`) with a JSON loader.
+- Exporters (File → Export), matching FORMAT.md §7:
+  - **PRISM** (`.prism` + `.props`): one variable `s`, one command per choice, exact rational
+    probabilities, sanitized action/label names, labels and reward structures, self-loops on
+    deadlocks. Branch rewards are folded into their expected value (W104). A non-point initial
+    distribution becomes an `init … endinit` block.
+  - **JANI** (`.jani`): the same encoding as one automaton, labels and rewards as transient
+    variables, and reachability properties (`P(max|min)=? [F φ]`, `[φ U ψ]`, `R{"r"}…=? [F φ]`)
+    translated; other properties are skipped with a warning. Loads in QUASAR's
+    `convert_jani_to_mdp`. *JANI for QUASAR* leaves rewards out, since QUASAR would otherwise
+    split states by their last edge reward.
+  - **Explicit** (`.tra`, `.lab`, `.srew`, `.trew`) in the layout of PRISM's `-exportmodel`,
+    downloaded as one zip.
+  - Exporting a model with validation errors asks for confirmation. Export warnings are
+    shown after the download.
+- Python exporters `mdpdesigner.export.export_prism / export_jani / export_explicit`, with
+  byte-identical output to the web exporters, and a CLI:
+  `mdp-designer convert FILE --to prism|jani|explicit [-o DIR] [--no-rewards]`.
